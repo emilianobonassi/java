@@ -1,20 +1,26 @@
 #
 # Oracle Java 7 Dockerfile
 #
-# https://github.com/dockerfile/java
-# https://github.com/dockerfile/java/tree/master/oracle-java7
+# https://github.com/emilianobonassi/java
+# https://github.com/emilianobonassi/java/tree/master/oracle-java7
 #
 
 # Pull base image.
-FROM dockerfile/ubuntu
+FROM ubuntu:14.04
+
+ENV DEBIAN_FRONTEND noninteractive
 
 # Install Java.
 RUN \
-  echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+  apt-get update -y && \
+  apt-get install software-properties-common -y && \
   add-apt-repository -y ppa:webupd8team/java && \
-  apt-get update && \
-  apt-get install -y oracle-java7-installer && \
-  rm -rf /var/lib/apt/lists/* && \
+  apt-get update
+
+RUN \
+  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+  apt-get install -y oracle-java7-installer     && \
+  rm -rf /var/lib/apt/lists/*                   && \
   rm -rf /var/cache/oracle-jdk7-installer
 
 # Define working directory.
